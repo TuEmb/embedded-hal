@@ -15,12 +15,18 @@ pub trait Frame: Sized {
     /// Creates a new frame.
     ///
     /// This will return `None` if the data slice is too long.
+    #[cfg(not(feature = "old-generic-function"))]
     fn new<T: Into<Id>>(id: T, data: &[u8]) -> Option<Self>;
+    #[cfg(feature = "old-generic-function")]
+    fn new(id: impl Into<Id>, data: &[u8]) -> Option<Self>;
 
     /// Creates a new remote frame (RTR bit set).
     ///
     /// This will return `None` if the data length code (DLC) is not valid.
+    #[cfg(not(feature = "old-generic-function"))]
     fn new_remote<T: Into<Id>>(id: T, dlc: usize) -> Option<Self>;
+    #[cfg(feature = "old-generic-function")]
+    fn new_remote(id: impl Into<Id>, dlc: usize) -> Option<Self>;
 
     /// Returns true if this frame is an extended frame.
     fn is_extended(&self) -> bool;
